@@ -194,5 +194,5 @@ Diferenciais do projeto:
 ________________________________________
 Status do Projeto: ✅ Concluído (com deploy funcional). Pronto para iterações e melhorias futuras.
 Autor: Tulio Silva dos Santos
-LinkedIn: https://www.linkedin.com/in/t%C3%BAlio-santos-b65720a4/
+LinkedIn: https://www.linkedin.com/in/túlio-santos-b65720a4/
 GitHub: tuliosannttos
