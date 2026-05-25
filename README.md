@@ -50,7 +50,7 @@ Este projeto demonstra uma aplicação prática e corporativa de Ciência de Dad
 
 # 📊 Pipeline do Projeto
 
-## 🔹 1. Carregamento dos Dados
+##  1. Carregamento dos Dados
 
 Os dados utilizados no projeto foram importados a partir de arquivos CSV contendo informações de movimentações de estoque dos anos de 2023 e 2024.
 
@@ -59,7 +59,7 @@ pd.read_csv()
 
 ---
 
-## 🔹 2. Tratamento e Padronização
+##  2. Tratamento e Padronização
 
 Foi realizado um processo completo de limpeza e padronização dos dados:
 
@@ -77,17 +77,17 @@ unicodedata.normalize()
 
 ---
 
-## 🔹 3. Filtragem de Consumo
+##  3. Filtragem de Consumo
 
 O projeto considera apenas movimentações de saída de produtos, representando efetivamente o consumo.
 
-```python
+python
 df[df["movimentacao"] == "saida"]
-```
+
 
 ---
 
-## 🔹 4. Engenharia de Features
+## 4. Engenharia de Features
 
 Os dados foram agrupados por:
 
@@ -101,7 +101,7 @@ Posteriormente foi realizado o merge das bases de 2023 e 2024 para criação das
 
 # 🤖 Machine Learning
 
-## 🔹 Modelo Utilizado
+##  Modelo Utilizado
 
 O algoritmo escolhido foi o XGBoost Regressor, um dos modelos mais eficientes para problemas de regressão e previsão.
 
@@ -118,13 +118,13 @@ XGBRegressor(
 
 ---
 
-## 🔹 Divisão dos Dados
+##  Divisão dos Dados
 
 Os dados foram divididos entre treino e teste utilizando:
 
-```python
+python
 train_test_split()
-```
+
 
 * 80% treino
 * 20% teste
@@ -135,23 +135,23 @@ train_test_split()
 
 Por se tratar de um problema de regressão, o desempenho do modelo foi avaliado utilizando métricas estatísticas apropriadas para previsão numérica.
 
-## 🔹 Métricas utilizadas
+##  Métricas utilizadas
 
-### ✅ MAE — Mean Absolute Error
+###  MAE — Mean Absolute Error
 
 Mede o erro médio absoluto entre os valores previstos e os valores reais.
 
 📌 Resultado obtido no projeto:
 
-```python
+python
 MAE: 34.02
-```
+
 
 Isso significa que, em média, o modelo apresentou um erro aproximado de 34 unidades por previsão.
 
 ---
 
-### ✅ RMSE — Root Mean Squared Error
+###  RMSE — Root Mean Squared Error
 
 Mede a raiz do erro quadrático médio.
 
@@ -159,27 +159,27 @@ Essa métrica penaliza erros maiores e ajuda a avaliar a estabilidade do modelo.
 
 📌 Resultado obtido no projeto:
 
-```python
+python
 RMSE: 193.06
-```
+
 
 ---
 
-### ✅ R² Score
+###  R² Score
 
 Indica o quanto o modelo consegue explicar a variabilidade dos dados.
 
 📌 Resultado obtido no projeto:
 
-```python
+python
 R² Score: 0.72
-```
+
 
 Isso significa que o modelo conseguiu explicar aproximadamente 72% da variabilidade do consumo dos produtos, demonstrando boa capacidade preditiva para um cenário real de operação logística.
 
 ---
 
-## 🔹 Funções utilizadas
+## Funções utilizadas
 
 ```python
 mean_absolute_error()
@@ -195,9 +195,9 @@ As métricas demonstraram que o modelo conseguiu capturar padrões importantes d
 
 Foi criada uma função responsável por prever automaticamente o consumo futuro de um produto com base no código informado.
 
-```python
+python
 prever_produto(codigo)
-```
+
 
 A função retorna:
 
@@ -215,7 +215,7 @@ O Flask foi utilizado para transformar o modelo preditivo em uma aplicação web
 
 Essa etapa aproxima o projeto de um ambiente corporativo real, demonstrando não apenas a construção do modelo, mas também sua disponibilização para uso operacional.
 
-## 🔹 Funcionalidades do Deploy
+##  Funcionalidades do Deploy
 
 * Disponibilização do modelo em ambiente web
 * Consulta de previsões em tempo real
@@ -223,7 +223,7 @@ Essa etapa aproxima o projeto de um ambiente corporativo real, demonstrando não
 * Simulação de ambiente de produção
 * Integração entre Ciência de Dados e aplicações backend
 
-## 🔹 Objetivos do Deploy
+##  Objetivos do Deploy
 
 * Disponibilizar o modelo em produção
 * Permitir previsões em tempo real
@@ -248,53 +248,52 @@ Essa etapa aproxima o projeto de um ambiente corporativo real, demonstrando não
 
 ---
 
-# ▶ Como Executar o Projeto
+#  Como Executar o Projeto
 
-## 🔹 1. Clonar o Repositório
+##  1. Clonar o Repositório
 
-```bash
+bash
 git clone <URL_DO_REPOSITORIO>
-```
+
 
 ---
 
-## 🔹 2. Criar Ambiente Virtual
+##  2. Criar Ambiente Virtual
 
-```bash
+bash
 python -m venv venv
-```
+
 
 ---
 
-## 🔹 3. Ativar Ambiente Virtual
+##  3. Ativar Ambiente Virtual
 
 ### Windows
 
-```bash
+bash
 venv\Scripts\activate
-```
+
 
 ### Linux/Mac
 
-```bash
+bash
 source venv/bin/activate
-```
+
 
 ---
 
-## 🔹 4. Instalar Dependências
+##  4. Instalar Dependências
 
-```bash
+bash
 pip install -r requirements.txt
-```
+
 
 ---
 
-## 🔹 5. Executar Flask
+##  5. Executar Flask
 
-```bash
+bash
 python app.py
-```
 
 ---
 
@@ -304,7 +303,7 @@ O modelo foi capaz de identificar padrões históricos de consumo e gerar previs
 
 A solução permitiu transformar dados operacionais do almoxarifado em informações estratégicas para apoio à tomada de decisão.
 
-## 🔹 Benefícios da solução
+## Benefícios da solução
 
 * Maior previsibilidade de consumo
 * Apoio ao planejamento de compras
@@ -319,25 +318,25 @@ O projeto demonstra uma aplicação prática de Machine Learning em ambiente cor
 
 # 📌 Diferenciais do Projeto
 
-✅ Projeto real aplicado em ambiente corporativo
+- Projeto real aplicado em ambiente corporativo
 
-✅ Dados reais de movimentação de estoque
+- Dados reais de movimentação de estoque
 
-✅ Aplicação prática no almoxarifado da Colliers International Group Inc.
+- Aplicação prática no almoxarifado da Colliers International Group Inc.
 
-✅ Pipeline completo de Ciência de Dados
+- Pipeline completo de Ciência de Dados
 
-✅ Tratamento e padronização de dados
+- Tratamento e padronização de dados
 
-✅ Engenharia de Features
+- Engenharia de Features
 
-✅ Machine Learning com XGBoost
+- Machine Learning com XGBoost
 
-✅ Avaliação com métricas de regressão
+- Avaliação com métricas de regressão
 
-✅ Deploy do modelo com Flask
+- Deploy do modelo com Flask
 
-✅ Estrutura pronta para produção
+- Estrutura pronta para produção
 
 ---
 
@@ -356,8 +355,5 @@ Durante o desenvolvimento deste projeto foram aplicados conhecimentos em:
 ---
 
 # 👨‍💻 Autor
-
-Desenvolvido por Tulio Santos.
-
-📌 Projeto desenvolvido para fins de estudo, portfólio e demonstração prática de habilidades em Ciência de Dados e Machine Learning.
+Tulio Santos
 
