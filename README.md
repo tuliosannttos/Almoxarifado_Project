@@ -1,198 +1,364 @@
-# Previsão de Consumo de Produtos - Projeto End-to-End com XGBoost e Flask
+# 🚀 Previsão de Consumo de Produtos com XGBoost + Flask
 
-# 1. Descrição
+> Projeto real desenvolvido no almoxarifado corporativo da empresa Colliers International Group Inc., com foco em previsão de demanda e otimização do controle de estoque.
 
-Este é um projeto end-to-end de previsão de consumo de produtos para o ano de 2025, baseado em dados históricos de 2023 e 2024. O objetivo é construir um modelo de Machine Learning que, a partir do consumo anual de um produto, seja capaz de prever sua demanda para o ano seguinte.
+## 📌 Sobre o Projeto
 
-Para a construção da solução, foi aplicada uma metodologia análoga ao CRISP-DM, abrangendo desde a coleta e limpeza de dados até a criação de um modelo preditivo em produção, disponibilizado via **aplicação web com Flask**.
+Este é um projeto real de Ciência de Dados aplicado ao setor de almoxarifado corporativo da empresa Colliers International Group Inc.
 
-# 2. Problema de Negócio
+O projeto foi desenvolvido com o objetivo de prever o consumo futuro de materiais e produtos utilizados nas operações internas da empresa, utilizando dados históricos reais de movimentações de estoque.
 
-## 2.1 Contexto da Empresa
+A solução foi construída utilizando técnicas de Machine Learning e Engenharia de Dados, permitindo transformar dados operacionais em previsões estratégicas de demanda.
 
-A empresa Colliers International Group Inc. possui um estoque de milhares de produtos. A gestão eficiente desse estoque é crucial para evitar falta de produtos ou excesso (aumento de custos). Atualmente, a previsão de compra é baseada em estimativas, o que gera ineficiências.
+O modelo foi treinado com dados históricos de consumo dos anos de 2023 e 2024, sendo capaz de prever automaticamente a demanda de produtos para 2025.
 
-## 2.2 Questão de Negócio
+Além do desenvolvimento do modelo preditivo, também foi realizado o deploy da aplicação utilizando Flask, disponibilizando o modelo em ambiente web/API para consultas de previsão em tempo real.
 
-O setor de compras precisa de uma ferramenta confiável e de fácil acesso para prever, com antecedência, qual será o consumo de cada produto no próximo ano. O desafio é migrar de um método reativo (baseado em demanda passada) para um método preditivo, baseado em dados e acessível para tomadores de decisão. A pergunta central é:
+Este projeto demonstra uma aplicação prática e corporativa de Ciência de Dados voltada para:
 
-> **Com base no consumo de 2023, qual será o consumo de um produto em 2025?**
+* Controle de estoque
+* Planejamento de compras
+* Logística interna
+* Gestão operacional
+* Redução de desperdícios
+* Tomada de decisão baseada em dados
 
-# 3. Entendimento do Negócio
+---
 
-O gerente de suprimentos precisa de um orçamento prévio e de uma previsão de demanda para planejar as compras do próximo ano, otimizar o nível de serviço e negociar com fornecedores. Caracteriza-se, portanto, como um problema clássico de **predição de séries temporais** (regressão), onde a variável alvo é o `consumo_2025` (inferido a partir de `consumo_2024`), e a variável de entrada mais importante é o `consumo_2023`.
+# 🎯 Objetivos do Projeto
 
-A solução precisa ser **interativa e amigável**, permitindo que qualquer usuário do setor de compras possa obter previsões sem precisar escrever código.
+* Realizar tratamento e padronização de dados históricos
+* Identificar padrões de consumo de produtos
+* Construir um modelo de Machine Learning para previsão de demanda
+* Disponibilizar o modelo através de deploy com Flask
+* Auxiliar processos logísticos e controle de estoque
 
-# 4. Coleta dos Dados
+---
 
-Os dados foram fornecidos em arquivos `.csv` e representam os registros de movimentação de estoque (entradas e saídas) dos anos de 2023 e 2024.
+# 🛠 Tecnologias Utilizadas
 
-**Arquivos utilizados:**
-- `DADOS 2023.csv`: Dados históricos de consumo referentes ao ano de 2023.
-- `DADOS 2024.csv`: Dados históricos de consumo referentes ao ano de 2024.
+## 📚 Bibliotecas Python
 
-**Principais colunas originais:**
-- `codigo`: Identificador único do produto.
-- `produto`: Nome/descrição do produto.
-- `movimentacao`: Tipo de movimentação ("saida" ou "entrada").
-- `qtd.`: Quantidade movimentada.
-- `categoria`, `vl. unitario`: Informações complementares.
+* Pandas
+* NumPy
+* Scikit-Learn
+* XGBoost
+* Flask
+* Unidecode / UnicodeData
 
-# 5. Limpeza e Preparação dos Dados
+---
 
-Nesta etapa, realizada inteiramente em Python com Pandas, os dados foram preparados para análise e modelagem. Os passos principais foram:
+# 📊 Pipeline do Projeto
 
-1.  **Correção de Encoding:** Foi criada uma função para tratar o encoding (`latin1` para `utf-8`) tanto nos nomes das colunas quanto nos textos, prevenindo erros com caracteres especiais (ex.: "TUBO DE DESCARGA").
-2.  **Padronização de Colunas:** Os nomes das colunas foram:
-    - Limpos de espaços em branco.
-    - Normalizados (removendo acentos e convertendo para ASCII).
-    - Convertidos para letras minúsculas (ex.: `vl. unitario` -> `valor_unitario`).
-3.  **Tratamento de Números:** A coluna `quantidade` (original `qtd.`) e `valor_unitario` foram convertidas para o tipo numérico, tratando a vírgula como separador decimal.
-4.  **Filtragem Essencial**: Foram mantidos **apenas os registros de "saida"** (consumo). As entradas são irrelevantes para a previsão de consumo.
-5.  **Agregação:** Os dados foram agrupados por `codigo` e `produto`, somando o consumo total anual. Isso gerou as bases `consumo_2023` e `consumo_2024`.
-6.  **Merge Final:** As duas bases foram unidas em um único DataFrame (`df_final`), onde cada linha representa um produto com seus consumos em 2023 e 2024. Valores ausentes (`NaN`) foram preenchidos com `0`.
+## 🔹 1. Carregamento dos Dados
 
-# 6. Análise Exploratória dos Dados (EDA)
-
-Embora sucinta no notebook, a EDA foi implícita nas etapas de agregação e validação. As principais ações foram:
-
-- **Validação de Colunas:** Garantia de que as colunas necessárias (`codigo`, `produto`, `movimentacao`, `quantidade`) existiam em ambos os DataFrames.
-- **Distribuição do Consumo:** O foco foi se preparar para entender como o consumo de 2023 (feature) se relaciona com o consumo de 2024 (target).
-
-# 7. Modelagem dos Dados e Machine Learning
-
-## 7.1 Feature Engineering
-
-A feature utilizada foi simples e direta, derivada diretamente do dado bruto:
-- **`consumo_2023` (Feature):** Quantidade total consumida do produto no ano de 2023.
-- **`consumo_2024` (Target):** Quantidade total consumida do produto no ano de 2024.
-
-## 7.2 Algoritmo de Machine Learning
-
-Foi escolhido o modelo **XGBoost Regressor**, conhecido por sua alta performance em problemas de regressão estruturada e robustez a outliers.
-
-**Hiperparâmetros configurados:**
-- `n_estimators=200`: Número de árvores no ensemble.
-- `max_depth=5`: Profundidade máxima de cada árvore.
-- `learning_rate=0.1`: Taxa de aprendizado.
-- `random_state=42`: Garantir reprodutibilidade.
-
-## 7.3 Treinamento e Avaliação
-
-Os dados foram divididos em treino (80%) e teste (20%) usando `train_test_split`. O modelo foi treinado para aprender a relação `consumo_2023` -> `consumo_2024`.
-
-**Métricas de desempenho no conjunto de teste:**
-- **MAE (Erro Absoluto Médio):** 34.02
-- **RMSE (Raiz do Erro Quadrático Médio):** 193.06
-- **R² (Coeficiente de Determinação):** 0.72
-
-> **Interpretação:** O modelo explica 72% da variância do consumo de 2024 a partir do consumo de 2023. O RMSE de 193 indica que, para produtos com alto consumo, o erro absoluto pode ser grande, mas o R² demonstra uma boa capacidade preditiva.
-
-# 8. Previsão para 2025
-
-O modelo final foi treinado com os dados de 2023 (feature) e 2024 (target). Para prever **2025**, o modelo é aplicado aos dados de consumo de 2024, gerando a `previsao_2025`.
-
-**Exemplo de previsão para um produto específico (código 1010078 - PAPEL TOALHA):**
+Os dados utilizados no projeto foram importados a partir de arquivos CSV contendo informações de movimentações de estoque dos anos de 2023 e 2024.
 
 ```python
-prever_produto(1010078)
-Resultado:
-python
-{'produto': 'PAPEL TOALHA',
- 'consumo_2023': 10247.0,
- 'previsao_2025': 10963.41}
-Para este produto, a previsão de consumo para 2025 é de ~10.963 unidades.
-9. Modelo em Produção - Deploy com Flask
-Para tornar o modelo acessível a usuários não técnicos e demonstrar habilidades completas de deploy, foi criada uma aplicação web com Flask.
-9.1 Funcionalidades da API Web
-A aplicação Flask oferece uma interface simples e intuitiva para consulta de previsões:
-•	Interface web amigável: Formulário HTML para entrada de dados.
-•	Busca por código do produto: Usuário digita o código e obtém a previsão.
-•	Busca por nome do produto: Opção alternativa para encontrar produtos.
-•	Resultados em tempo real: Retorno imediato da previsão de consumo para 2025.
-9.2 Exemplo de Uso
-Conforme demonstrado na interface da aplicação:
-text
-🔍 Buscar Produto
+pd.read_csv()
+```
 
-Código: [1010078]
-Nome: [________________]
+---
 
-[Prever]
+## 🔹 2. Tratamento e Padronização
 
-─────────────────────────
+Foi realizado um processo completo de limpeza e padronização dos dados:
 
-📊 Resultados:
+* Correção de encoding
+* Padronização de colunas
+* Remoção de caracteres especiais
+* Conversão de tipos numéricos
+* Normalização dos nomes das colunas
 
-• 1010078 - PAPEL TOALHA → Previsão: 12638.46
-9.3 Tecnologias do Deploy
-•	Framework Web: Flask (micro-framework Python)
-•	Front-end: HTML5, CSS3 (interface responsiva)
-•	Serialização do Modelo: Pickle (para salvar/carregar o modelo treinado)
-•	Servidor Local: Desenvolvido e testado localmente
-9.4 Como Executar a Aplicação
-bash
-# 1. Clone o repositório
-git clone https://github.com/seu-usuario/seu-repositorio.git
+Exemplo:
 
-# 2. Instale as dependências
+```python
+unicodedata.normalize()
+```
+
+---
+
+## 🔹 3. Filtragem de Consumo
+
+O projeto considera apenas movimentações de saída de produtos, representando efetivamente o consumo.
+
+```python
+df[df["movimentacao"] == "saida"]
+```
+
+---
+
+## 🔹 4. Engenharia de Features
+
+Os dados foram agrupados por:
+
+* Código do produto
+* Nome do produto
+* Quantidade consumida
+
+Posteriormente foi realizado o merge das bases de 2023 e 2024 para criação das variáveis utilizadas no treinamento.
+
+---
+
+# 🤖 Machine Learning
+
+## 🔹 Modelo Utilizado
+
+O algoritmo escolhido foi o XGBoost Regressor, um dos modelos mais eficientes para problemas de regressão e previsão.
+
+### Configurações do modelo:
+
+```python
+XGBRegressor(
+    n_estimators=200,
+    max_depth=5,
+    learning_rate=0.1,
+    random_state=42
+)
+```
+
+---
+
+## 🔹 Divisão dos Dados
+
+Os dados foram divididos entre treino e teste utilizando:
+
+```python
+train_test_split()
+```
+
+* 80% treino
+* 20% teste
+
+---
+
+## 📈 Métricas de Avaliação
+
+Por se tratar de um problema de regressão, o desempenho do modelo foi avaliado utilizando métricas estatísticas apropriadas para previsão numérica.
+
+## 🔹 Métricas utilizadas
+
+### ✅ MAE — Mean Absolute Error
+
+Mede o erro médio absoluto entre os valores previstos e os valores reais.
+
+📌 Resultado obtido no projeto:
+
+```python
+MAE: 34.02
+```
+
+Isso significa que, em média, o modelo apresentou um erro aproximado de 34 unidades por previsão.
+
+---
+
+### ✅ RMSE — Root Mean Squared Error
+
+Mede a raiz do erro quadrático médio.
+
+Essa métrica penaliza erros maiores e ajuda a avaliar a estabilidade do modelo.
+
+📌 Resultado obtido no projeto:
+
+```python
+RMSE: 193.06
+```
+
+---
+
+### ✅ R² Score
+
+Indica o quanto o modelo consegue explicar a variabilidade dos dados.
+
+📌 Resultado obtido no projeto:
+
+```python
+R² Score: 0.72
+```
+
+Isso significa que o modelo conseguiu explicar aproximadamente 72% da variabilidade do consumo dos produtos, demonstrando boa capacidade preditiva para um cenário real de operação logística.
+
+---
+
+## 🔹 Funções utilizadas
+
+```python
+mean_absolute_error()
+mean_squared_error()
+r2_score()
+```
+
+As métricas demonstraram que o modelo conseguiu capturar padrões importantes de consumo, apresentando boa capacidade preditiva para utilização em cenários reais de operação e controle de estoque no almoxarifado da Colliers International Group Inc.
+
+---
+
+# 🔍 Sistema de Previsão
+
+Foi criada uma função responsável por prever automaticamente o consumo futuro de um produto com base no código informado.
+
+```python
+prever_produto(codigo)
+```
+
+A função retorna:
+
+* Nome do produto
+* Consumo histórico
+* Previsão futura de demanda
+
+---
+
+# 🌐 Deploy com Flask
+
+Após o treinamento e validação do modelo de Machine Learning, foi realizado o deploy da aplicação utilizando Flask.
+
+O Flask foi utilizado para transformar o modelo preditivo em uma aplicação web/API funcional, permitindo consultas de previsão em tempo real.
+
+Essa etapa aproxima o projeto de um ambiente corporativo real, demonstrando não apenas a construção do modelo, mas também sua disponibilização para uso operacional.
+
+## 🔹 Funcionalidades do Deploy
+
+* Disponibilização do modelo em ambiente web
+* Consulta de previsões em tempo real
+* Estruturação de API para integração futura
+* Simulação de ambiente de produção
+* Integração entre Ciência de Dados e aplicações backend
+
+## 🔹 Objetivos do Deploy
+
+* Disponibilizar o modelo em produção
+* Permitir previsões em tempo real
+* Criar uma estrutura de API para integração
+* Simular um ambiente real de aplicação de Machine Learning
+
+---
+
+# 📁 Estrutura do Projeto
+
+```bash
+📦 projeto-previsao-consumo
+ ┣ 📂 data
+ ┃ ┣ 📄 DADOS 2023.csv
+ ┃ ┗ 📄 DADOS 2024.csv
+ ┣ 📄 app.py
+ ┣ 📄 modelo.pkl
+ ┣ 📄 requirements.txt
+ ┣ 📄 notebook.ipynb
+ ┗ 📄 README.md
+```
+
+---
+
+# ▶ Como Executar o Projeto
+
+## 🔹 1. Clonar o Repositório
+
+```bash
+git clone <URL_DO_REPOSITORIO>
+```
+
+---
+
+## 🔹 2. Criar Ambiente Virtual
+
+```bash
+python -m venv venv
+```
+
+---
+
+## 🔹 3. Ativar Ambiente Virtual
+
+### Windows
+
+```bash
+venv\Scripts\activate
+```
+
+### Linux/Mac
+
+```bash
+source venv/bin/activate
+```
+
+---
+
+## 🔹 4. Instalar Dependências
+
+```bash
 pip install -r requirements.txt
+```
 
-# 3. Execute a aplicação Flask
+---
+
+## 🔹 5. Executar Flask
+
+```bash
 python app.py
+```
 
-# 4. Acesse no navegador
-http://localhost:5000
-10. Conclusão e Resultados de Negócio
-O projeto atingiu seu objetivo principal: criar um modelo preditivo de consumo de produtos com um desempenho satisfatório (R² de 0.72) e disponibilizá-lo através de uma aplicação web acessível. Isso permite que o setor de compras:
-•	Planeje com mais antecedência: Pode-se prever a demanda para 2025 enquanto ainda se coleta dados de 2024.
-•	Baseie decisões em dados: As previsões substituem estimativas manuais.
-•	Identifique produtos de alto consumo: O modelo destaca itens críticos (como o "PAPEL TOALHA") que merecem atenção especial no planejamento de estoque.
-•	Acessibilidade democrática: Qualquer pessoa do setor pode usar a interface web, sem necessidade de conhecimento em programação.
-•	Tomada de decisão mais rápida: Respostas imediatas através da API Flask.
-11. Próximos Passos e Melhorias
-Para evoluir o projeto e melhorar a precisão, as seguintes ações são sugeridas:
-1.	Incluir mais features: Adicionar informações como categoria, valor_unitario e sazonalidade (mês a mês, em vez de total anual).
-2.	Testar outros modelos: Comparar o XGBoost com Random Forest, LightGBM ou uma regressão linear simples.
-3.	Tratar a sazonalidade interna: Separar o consumo por trimestre/semestre para capturar padrões.
-4.	Melhorar a interface web: Adicionar gráficos de evolução do consumo e dashboard interativo.
-5.	Deploy em nuvem: Hospedar a aplicação no Heroku, Render ou AWS para acesso global.
-6.	Criar uma API REST: Disponibilizar endpoints para integração com sistemas da empresa.
-7.	Adicionar autenticação: Controle de acesso para usuários autorizados.
-8.	Realizar validação cruzada: Para uma avaliação mais robusta do modelo.
-12. Ferramentas Utilizadas
-12.1 Linguagem e Ambiente
-•	Linguagem: Python 3.14
-•	Ambiente: Jupyter Notebook (desenvolvimento) + Ambiente Python (produção)
-12.2 Principais Bibliotecas
-•	Manipulação de Dados: pandas, numpy
-•	Machine Learning: xgboost, scikit-learn
-•	Web App: flask, pickle
-•	Processamento de Texto: unicodedata
-12.3 Estrutura do Projeto
-text
-├── app.py                 # Aplicação Flask
-├── model.pkl              # Modelo treinado serializado
-├── requirements.txt       # Dependências do projeto
-├── templates/
-│   └── index.html        # Interface web
-├── static/
-│   └── style.css         # Estilos da aplicação
-├── DADOS 2023.csv         # Dados históricos
-├── DADOS 2024.csv         # Dados históricos
-└── Untitled.ipynb         # Notebook de desenvolvimento
-Sobre o Projeto
-Este projeto foi desenvolvido como parte de um portfólio de Ciência de Dados, demonstrando a capacidade de construir um pipeline de Machine Learning end-to-end completo, desde a leitura de dados csv "sujos" até a criação de um modelo preditivo funcional e seu deploy em uma aplicação web com Flask.
-Diferenciais do projeto:
-•	✅ Tratamento robusto de dados reais (encoding, padronização)
-•	✅ Modelagem com XGBoost (alta performance)
-•	✅ Métricas claras de avaliação (MAE, RMSE, R²)
-•	✅ Interface web amigável para usuários finais
-•	✅ Código comentado e organizado
-•	✅ Projeto pronto para deploy em produção
-________________________________________
-Status do Projeto: ✅ Concluído (com deploy funcional). Pronto para iterações e melhorias futuras.
-Autor: Tulio Silva dos Santos
-LinkedIn: https://www.linkedin.com/in/túlio-santos-b65720a4/
-GitHub: tuliosannttos
+---
+
+# 📊 Resultados do Projeto
+
+O modelo foi capaz de identificar padrões históricos de consumo e gerar previsões automatizadas para os produtos analisados.
+
+A solução permitiu transformar dados operacionais do almoxarifado em informações estratégicas para apoio à tomada de decisão.
+
+## 🔹 Benefícios da solução
+
+* Maior previsibilidade de consumo
+* Apoio ao planejamento de compras
+* Melhor controle de estoque
+* Redução de desperdícios
+* Apoio à gestão logística
+* Otimização operacional
+
+O projeto demonstra uma aplicação prática de Machine Learning em ambiente corporativo real, utilizando dados reais de operação da Colliers International Group Inc.
+
+---
+
+# 📌 Diferenciais do Projeto
+
+✅ Projeto real aplicado em ambiente corporativo
+
+✅ Dados reais de movimentação de estoque
+
+✅ Aplicação prática no almoxarifado da Colliers International Group Inc.
+
+✅ Pipeline completo de Ciência de Dados
+
+✅ Tratamento e padronização de dados
+
+✅ Engenharia de Features
+
+✅ Machine Learning com XGBoost
+
+✅ Avaliação com métricas de regressão
+
+✅ Deploy do modelo com Flask
+
+✅ Estrutura pronta para produção
+
+---
+
+# 📚 Aprendizados
+
+Durante o desenvolvimento deste projeto foram aplicados conhecimentos em:
+
+* Engenharia de Dados
+* Limpeza e tratamento de dados
+* Machine Learning
+* Regressão
+* Deploy de modelos
+* APIs com Flask
+* Estruturação de projetos de Ciência de Dados
+
+---
+
+# 👨‍💻 Autor
+
+Desenvolvido por Tulio Santos.
+
+📌 Projeto desenvolvido para fins de estudo, portfólio e demonstração prática de habilidades em Ciência de Dados e Machine Learning.
+
