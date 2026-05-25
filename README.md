@@ -54,9 +54,8 @@ Este projeto demonstra uma aplicação prática e corporativa de Ciência de Dad
 
 Os dados utilizados no projeto foram importados a partir de arquivos CSV contendo informações de movimentações de estoque dos anos de 2023 e 2024.
 
-```python
+python
 pd.read_csv()
-```
 
 ---
 
@@ -72,9 +71,9 @@ Foi realizado um processo completo de limpeza e padronização dos dados:
 
 Exemplo:
 
-```python
-unicodedata.normalize()
-```
+python
+unicodedata.normalize() 
+
 
 ---
 
