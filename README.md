@@ -355,7 +355,9 @@ Durante o desenvolvimento deste projeto foram aplicados conhecimentos em:
 
 # 👨‍💻 Autor
 Tulio Santos
+
 Linkedin: https://www.linkedin.com/in/túlio-santos-b65720a4/
+
 GitHub: https://github.com/tuliosannttos
 
 
