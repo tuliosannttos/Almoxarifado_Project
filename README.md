@@ -232,6 +232,8 @@ Essa etapa aproxima o projeto de um ambiente corporativo real, demonstrando não
 * Criar uma estrutura de API para integração
 * Utilizar um ambiente real de aplicação de Machine Learning
 
+Segue abaixo imagem da API construída no Flask sendo utlizada:
+
 
 <img width="740" height="357" alt="Sem título" src="https://github.com/user-attachments/assets/4d251ba6-371a-4270-993d-ad14cb56eb0e" />
 
