@@ -128,6 +128,9 @@ train_test_split()
 * 80% treino
 * 20% teste
 
+
+
+
 ---
 
 ## 📈 Métricas de Avaliação
@@ -227,7 +230,11 @@ Essa etapa aproxima o projeto de um ambiente corporativo real, demonstrando não
 * Disponibilizar o modelo em produção
 * Permitir previsões em tempo real
 * Criar uma estrutura de API para integração
-* Simular um ambiente real de aplicação de Machine Learning
+* Utilizar um ambiente real de aplicação de Machine Learning
+
+
+<img width="740" height="357" alt="Sem título" src="https://github.com/user-attachments/assets/4d251ba6-371a-4270-993d-ad14cb56eb0e" />
+
 
 ---
 
