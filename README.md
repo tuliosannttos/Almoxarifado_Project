@@ -1,4 +1,4 @@
-# 🚀 Previsão de Consumo de Produtos com XGBoost + Flask
+# 🚀 Previsão de Consumo de Estoque Almoxarifado
 Projeto real desenvolvido no almoxarifado corporativo da empresa Colliers International Group Inc., com foco em previsão de demanda e otimização do controle de estoque.
 
 ## 📌 Sobre o Projeto
