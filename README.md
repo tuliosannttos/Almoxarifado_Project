@@ -252,7 +252,7 @@ Essa etapa aproxima o projeto de um ambiente corporativo real, demonstrando não
 ##  1. Clonar o Repositório
 
 bash
-git clone <URL_DO_REPOSITORIO>
+git clone https://github.com/tuliosannttos/Almoxarifado_Project/tree/main
 
 
 ---
@@ -273,10 +273,6 @@ bash
 venv\Scripts\activate
 
 
-### Linux/Mac
-
-bash
-source venv/bin/activate
 
 
 ---
