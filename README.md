@@ -56,6 +56,9 @@ Os dados utilizados no projeto foram importados a partir de arquivos CSV contend
 python
 pd.read_csv()
 
+<img width="1372" height="617" alt="parte 1" src="https://github.com/user-attachments/assets/63330990-3e52-4b13-ab88-b2ca59e94304" />
+
+
 ---
 
 ##  2. Tratamento e Padronização
